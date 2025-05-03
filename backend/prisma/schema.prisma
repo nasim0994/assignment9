@@ -18,6 +18,11 @@ enum UserStatus {
   BLOCKED
 }
 
+enum VoteType {
+  UP
+  DOWN
+}
+
 model User {
   id        String     @id @default(uuid())
   email     String     @unique
@@ -28,8 +33,92 @@ model User {
   isDeleted Boolean    @default(false)
   isPremium Boolean    @default(false)
 
+  products Product[]
+  comments Comment[]
+  ratings  Rating[]
+  votes    Vote[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("users")
+}
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  image     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  products  Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id          String @id @default(uuid())
+  title       String
+  price       Float
+  description String
+  location    String
+  image       String
+
+  isPremium  Boolean @default(false)
+  isApproved Boolean @default(false)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  comments Comment[]
+  ratings  Rating[]
+  votes    Vote[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("foods")
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  text      String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("comments")
+}
+
+model Rating {
+  id        String   @id @default(uuid())
+  rate      Int
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ratings")
+}
+
+model Vote {
+  id        String   @id @default(uuid())
+  type      VoteType
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, productId])
+  @@map("votes")
 }
