@@ -6,13 +6,20 @@ import config from './config';
 import router from './routes';
 import globalErrorHandler from './errors/globalErrorhandler';
 import { notFound } from './errors/notFound';
+import cookieParser from 'cookie-parser';
 const app: Application = express();
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('uploads'));
-app.use(cors());
+app.use(
+  cors({
+    origin: ['http://localhost:3015'],
+    credentials: true,
+  }),
+);
+app.use(cookieParser());
 
 app.get('/', (req: Request, res: Response) => {
   res.send(`server is running on port ${config.PORT} 🏃‍♂️‍➡️`);

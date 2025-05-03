@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { AnyZodObject } from 'zod';
 
-const verifyValidate = (schema: AnyZodObject) => {
+export const verifyValidate = (schema: AnyZodObject) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       await schema.parseAsync({
@@ -14,5 +14,3 @@ const verifyValidate = (schema: AnyZodObject) => {
     }
   };
 };
-
-export default verifyValidate;
