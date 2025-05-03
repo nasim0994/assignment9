@@ -47,7 +47,7 @@ model User {
 model Category {
   id        String    @id @default(uuid())
   name      String    @unique
-  image     String
+  slug      String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   products  Product[]
@@ -58,6 +58,7 @@ model Category {
 model Product {
   id          String @id @default(uuid())
   title       String
+  slug        String @unique
   price       Float
   description String
   location    String
