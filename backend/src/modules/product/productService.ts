@@ -18,6 +18,11 @@ export const getProductByIdService = async (id: string) => {
   return result;
 };
 
+export const getProductBySlugService = async (slug: string) => {
+  const result = prisma.product.findUnique({ where: { slug } });
+  return result;
+};
+
 export const updateProductService = async (id: string, data: IProduct) => {
   const result = await prisma.product.update({
     where: { id },
